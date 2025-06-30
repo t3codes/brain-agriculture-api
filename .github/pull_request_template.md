@@ -1,25 +1,19 @@
-## 🧩 Pull Request: Configuração inicial do Prisma + Geração de Models
+## 🧩 Pull Request: Atualizações no Prisma e módulo de autenticação
 
 ### 📋 Descrição
 
-Este PR implementa a configuração inicial do Prisma no projeto, adicionando:
+Este PR inclui as seguintes alterações:
 
-- Instalação do Prisma e @prisma/client
-- Criação do arquivo `schema.prisma` com os models:
-  - `User` (com autenticação via JWT prevista)
-  - `Producer` (relacionado a User)
-  - `Farm`, `Crop`, `Harvest`, `FarmCrop`
-- Criação da primeira migration: `init`
-- Geração do client Prisma
-- Atualização do `.env` e `.env.example` com `DATABASE_URL`
-- Criação e configuração de container postgres `docker-compose.pg.yml`
+- Criação e ajuste dos models no `schema.prisma` adicionando campo de refreshToken ao usuário
+- Execução das migrations necessárias para refletir os models atualizados
+- Atualização do client Prisma com `prisma generate`
+- Implementação do módulo de autenticação com rota de login JWT
+- Configuração do bcrypt para hash e validação de senhas
 
-### ✅ Comandos executados
+### ✅ Novas bibliotecas
 
 ```bash
-npm install prisma --save-dev
-npm install @prisma/client
+npm install bcrypt
+npm install --save-dev @types/bcrypt
+npm install @nestjs/jwt @nestjs/passport passport passport-jwt
 
-npx prisma init
-npx prisma generate
-npx prisma migrate dev --name init
