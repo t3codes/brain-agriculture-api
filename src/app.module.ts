@@ -9,9 +9,10 @@ import { ProducersModule } from './modules/producers/producers.module';
 import { FarmsModule } from './modules/farms/farms.module';
 import { CropsModule } from './modules/crops/crops.module';
 import { RolesGuard } from './decorators/user.role.decorator';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
-  imports: [DatabaseModule, UsersModule, AuthModule, ProducersModule, FarmsModule, CropsModule],
+  imports: [DatabaseModule, UsersModule, AuthModule, ProducersModule, FarmsModule, CropsModule, DashboardModule],
   controllers: [],
   providers: [PrismaService, RolesGuard],
 })

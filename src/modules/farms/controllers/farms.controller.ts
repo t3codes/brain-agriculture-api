@@ -17,6 +17,7 @@ import { CreateFarmDto } from '../dto/create-farm.dto';
 import { UpdateFarmDto } from '../dto/update-farm.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateFarmSwagger, FindAllFarmsSwagger, FindOneFarmSwagger, DeleteFarmSwagger, UpdateFarmSwagger } from '../swagger/farms.swagger';
 
 @ApiTags('farms')
 @ApiBearerAuth()
@@ -26,11 +27,13 @@ export class FarmsController {
   constructor(private readonly farmsService: FarmsService) { }
 
   @Post('create')
+  @CreateFarmSwagger()
   async create(@Body() createDto: CreateFarmDto) {
     return this.farmsService.create(createDto);
   }
 
   @Get()
+  @FindAllFarmsSwagger()
   async findAll(
     @Request() req,
     @Query('producerId') producerId: number,
@@ -46,6 +49,7 @@ export class FarmsController {
 
 
   @Get(':id')
+  @FindOneFarmSwagger()
   async findOne(@Param('id') id: string, @Request() req) {
     if (!req.user.userId) {
       throw new ForbiddenException('Usuário não autenticado');
@@ -57,6 +61,7 @@ export class FarmsController {
 
 
   @Put('update/:id')
+  @UpdateFarmSwagger()
   async update(
     @Param('id') id: string,
     @Body() updateFarmDto: UpdateFarmDto,
@@ -75,6 +80,7 @@ export class FarmsController {
   }
 
   @Delete('delete/:id')
+  @DeleteFarmSwagger()
   async remove(@Param('id') id: string, @Request() req) {
     if (!req.user.userId) {
       throw new ForbiddenException('Usuário não autenticado');
@@ -85,6 +91,7 @@ export class FarmsController {
       throw new ForbiddenException('ID do usuário não encontrado no token');
     }
 
-    return this.farmsService.remove(+id, userId);
+    this.farmsService.remove(+id, userId);
+    return {message: "Fazenda removida com sucesso"}
   }
 }

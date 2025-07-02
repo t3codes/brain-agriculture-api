@@ -44,26 +44,48 @@ export class FarmsService {
     });
   }
 
-  async findAll(producerId?: number, page = 1) {
+  async findAll(producerId: number, page = 1, pageSize = 10) {
     if (!producerId) {
-      throw new BadRequestException(
-        'O parâmetro "producerId" é obrigatório.',
-      );
+      throw new BadRequestException('O parâmetro "producerId" é obrigatório.');
     }
-    const take = 10;
-    const skip = (page - 1) * take;
-    const producer = await this.prisma.producer.findUnique({
+
+    // Verifica se o produtor existe
+    const producerExists = await this.prisma.producer.findUnique({
       where: { id: producerId },
+      select: { id: true } // Apenas o necessário para verificação
     });
-    if (!producer) {
+
+    if (!producerExists) {
       throw new NotFoundException('Produtor não encontrado');
     }
-    return this.prisma.farm.findMany({
-      where: { producerId },
-      orderBy: { createdAt: 'desc' },
-      skip,
-      take,
-    });
+
+    const skip = (page - 1) * pageSize;
+    const where = { producerId };
+
+    // Busca os itens paginados e o total simultaneamente
+    const [farms, totalItems] = await Promise.all([
+      this.prisma.farm.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: pageSize,
+      }),
+      this.prisma.farm.count({ where })
+    ]);
+
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    return {
+      data: farms,
+      pagination: {
+        currentPage: page,
+        pageSize,
+        totalItems,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      }
+    };
   }
 
 

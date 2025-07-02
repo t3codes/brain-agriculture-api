@@ -46,7 +46,7 @@ describe('AuthService', () => {
   });
 
   describe('validateUser', () => {
-    it('should throw NotFoundException if user not found', async () => {
+    it('deve lançar NotFoundException se o usuário não for encontrado', async () => {
       prismaMock.user.findUnique.mockResolvedValue(null);
 
       await expect(
@@ -54,7 +54,7 @@ describe('AuthService', () => {
       ).rejects.toThrow(NotFoundException);
     });
 
-    it('should throw UnauthorizedException if password is invalid', async () => {
+    it('deve lançar UnauthorizedException se a senha for inválida', async () => {
       prismaMock.user.findUnique.mockResolvedValue({ password: 'hashed' });
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
@@ -63,7 +63,7 @@ describe('AuthService', () => {
       ).rejects.toThrow(UnauthorizedException);
     });
 
-    it('should return user if credentials are valid', async () => {
+    it('deve retornar o usuário se as credenciais forem válidas', async () => {
       const user = { id: 1, email: 'test@example.com', password: 'hashed' };
       prismaMock.user.findUnique.mockResolvedValue(user);
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
@@ -74,7 +74,7 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('should generate tokens and save refresh token', async () => {
+    it('deve gerar os tokens e salvar o refresh token', async () => {
       const user = { id: 1, email: 'test@example.com' };
       jwtService.sign = jest
         .fn()
@@ -98,7 +98,7 @@ describe('AuthService', () => {
   });
 
   describe('clearRefreshToken', () => {
-    it('should clear the refresh token', async () => {
+    it('deve limpar o refresh token', async () => {
       prismaMock.user.update.mockResolvedValue({});
       await authService.clearRefreshToken(1);
       expect(prismaMock.user.update).toHaveBeenCalledWith({

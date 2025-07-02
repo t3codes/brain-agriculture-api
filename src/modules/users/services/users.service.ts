@@ -32,18 +32,16 @@ export class UsersService {
     return userWithoutPassword;
   }
 
-  // Lista todos os usuários COM seus produtores (opcional)
   async findAll(): Promise<(User & { producers: Producer[] })[]> {
     return this.prisma.user.findMany({
-      include: { producers: true }, // 👈 Carrega os relacionamentos
+      include: { producers: true },
     });
   }
 
-  // Busca um usuário por ID (com produtores associados)
   async findOne(id: number): Promise<User & { producers: Producer[] }> {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { producers: true }, // 👈 Inclui os produtores
+      include: { producers: true },
     });
 
     if (!user) {
@@ -52,9 +50,8 @@ export class UsersService {
     return user;
   }
 
-  // Atualiza um usuário
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    await this.findOne(id); // Verifica se usuário existe
+    await this.findOne(id);
 
     let hashedPassword: string | undefined = undefined;
 
@@ -73,54 +70,57 @@ export class UsersService {
   }
 
 
-  async remove(id: number, authUser: { id: number; role: Role }): Promise<User> {
+  async remove(id: number, authUser: { id: number; role: Role }): Promise<{ message: string }> {
     if (authUser.role !== Role.ADMIN) {
       throw new ForbiddenException('Apenas administradores podem deletar usuários.');
     }
+
     if (authUser.id === id) {
-      throw new ForbiddenException('Por segurança, Você não pode deletar sua própria conta.');
+      throw new ForbiddenException('Por segurança, você não pode deletar sua própria conta.');
     }
+
     const user = await this.findOne(id);
-    console.log("User to be deleted:", user);
-    return this.prisma.user.delete({
+
+    await this.prisma.user.delete({
       where: { id },
     });
+
+    return { message: 'Usuário removido com sucesso' };
   }
 
 
   async toggleUserRole(
     targetUserId: number,
     newRole: Role,
-    authUser: { id: number; role: Role; superuser: boolean }
-  ): Promise<Omit<User, 'password'>> {
+    authUser: { id: number; role: Role; superuser: boolean },
+  ): Promise<{ message: string }> {
     if (authUser.role !== Role.ADMIN) {
       throw new ForbiddenException('Apenas administradores podem alterar papéis de usuários.');
     }
+
     if (authUser.id === targetUserId) {
       throw new ForbiddenException('Você não pode alterar seu próprio papel.');
     }
+
     if (!authUser.superuser) {
-      throw new ForbiddenException('As permissões deste usuário, não podem ser auteradas.');
+      throw new ForbiddenException('As permissões deste usuário não podem ser alteradas.');
     }
+
     if (!Object.values(Role).includes(newRole)) {
       throw new BadRequestException('Role inválida');
     }
+
     const user = await this.findOne(targetUserId);
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
     }
-    const updatedUser = await this.prisma.user.update({
+
+    await this.prisma.user.update({
       where: { id: targetUserId },
       data: { role: newRole },
     });
 
-    // Aqui, você pode invalidar o token atual, forçando o usuário a se logar novamente.
-    // Isso pode ser feito removendo o refresh token ou forçando uma expiração imediata no lado do cliente.
-
-    // Remover a senha antes de retornar o usuário atualizado
-    const { password, ...userWithoutPassword } = updatedUser;
-
-    return userWithoutPassword;
+    return { message: 'Permissão do usuário atualizada com sucesso.' };
   }
 
 
