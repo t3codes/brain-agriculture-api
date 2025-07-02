@@ -19,12 +19,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     role: Role; 
     superuser: boolean;
   }> {
-    console.log('Payload do JWT:', payload);
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
       select: { id: true, email: true, role: true, superuser: true },
     });
-    console.log('Usuário encontrado no banco de dados:', user);
     if (!user) {
       throw new UnauthorizedException('Usuário não encontrado');
     }

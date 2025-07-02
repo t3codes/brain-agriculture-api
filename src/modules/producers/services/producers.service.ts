@@ -10,7 +10,7 @@ import { UpdateProducerDto } from '../dto/update-producer.dto';
 
 @Injectable()
 export class ProducersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   private async validateCpfCnpj(
     cpfOrCnpj: string,
@@ -105,14 +105,7 @@ export class ProducersService {
     return this.update(producer.id, updateDto, userId);
   }
 
-  async removeByUserId(userId: number) {
-    const producer = await this.findByUserId(userId);
-    if (!producer) {
-      throw new NotFoundException('Produtor não encontrado');
-    }
-
-    return this.remove(producer.id, userId);
-  }
+  
 
   async update(id: number, updateDto: UpdateProducerDto, userId: number) {
     const producer = await this.findOne(id, userId);
@@ -149,21 +142,18 @@ export class ProducersService {
     }
   }
 
-  async remove(id: number, userId: number) {
-    const producer = await this.findOne(id, userId);
+  async remove(id: number) {
+    const producer = await this.prisma.producer.findUnique({
+      where: { id },
+    });
+
     if (!producer) {
-      throw new ForbiddenException('Acesso negado');
+      throw new NotFoundException('Produtor não encontrado');
     }
 
     const hasFarms = await this.prisma.farm.count({
       where: { producerId: id },
     });
-
-    if (hasFarms > 0) {
-      throw new ConflictException(
-        'Não é possível excluir produtor com fazendas associadas',
-      );
-    }
 
     await this.prisma.producer.delete({ where: { id } });
 
