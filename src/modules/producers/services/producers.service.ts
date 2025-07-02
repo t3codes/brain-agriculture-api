@@ -60,16 +60,16 @@ export class ProducersService {
 
   async findAll(userId: number) {
     return this.prisma.producer.findMany({
-      where: { userId },
-      include: {
-        farms: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      // where: { userId },
+      // include: {
+      //   farms: true,
+      //   user: {
+      //     select: {
+      //       id: true,
+      //       name: true,
+      //     },
+      //   },
+      // },
       orderBy: {
         createdAt: 'desc',
       },

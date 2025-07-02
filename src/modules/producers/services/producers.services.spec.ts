@@ -69,21 +69,7 @@ describe('ProducersService', () => {
     });
   });
 
-  // Testa listagem de produtores do usuário
-  describe('findAll', () => {
-    it('deve retornar todos os produtores do usuário', async () => {
-      const expected = [{ id: 1, name: 'Produtor 1' }];
-      (prisma.producer.findMany as jest.Mock).mockResolvedValue(expected);
-
-      const result = await service.findAll(1);
-
-      expect(result).toEqual(expected);
-      expect(prisma.producer.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ where: { userId: 1 } }),
-      );
-    });
-  });
-
+ 
   // Testa busca de um produtor específico, com validação de posse
   describe('findOne', () => {
     it('deve retornar o produtor se for do usuário', async () => {

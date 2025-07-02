@@ -1,5 +1,5 @@
 import { IsString, Length } from 'class-validator';
-import { IsCpfOrCnpj } from 'src/decorators/is-cpf-or-cnpj.validator';
+import { IsCpfOrCnpj } from 'src/decorators/cpf-cnpj.validator';
 
 export class CreateProducerDto {
   @IsString()
