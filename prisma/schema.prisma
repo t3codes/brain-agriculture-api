@@ -5,71 +5,65 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  noQueriesCache = true
+}
+
+enum Role {
+  ADMIN
+  FARMER
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  name        String
-  email       String     @unique
-  password    String
+  id           Int        @id @default(autoincrement())
+  name         String
+  email        String     @unique
+  password     String
   refreshToken String? 
-  producers   Producer[] // O usuáio pode criar vários produtores
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  role         Role       @default(FARMER) // <- novo campo
+  superuser    Boolean    @default(false)
+  producers    Producer[] // O usuário pode criar vários produtores
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
+
 
 model Producer {
   id           Int        @id @default(autoincrement())
   cpfOrCnpj    String     @unique
   name         String
   farms        Farm[]     @relation("ProducerFarms")
-  userId       Int       
-  user         User       @relation(fields: [userId], references: [id])
+  user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId Int? 
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
 
 model Farm {
-  id               Int           @id @default(autoincrement())
-  name             String
-  city             String
-  state            String
-  totalArea        Float
-  arableArea       Float
-  vegetationArea   Float
-  producerId       Int
-  producer         Producer      @relation(fields: [producerId], references: [id], name: "ProducerFarms")
-  plantedCrops     FarmCrop[]    @relation("FarmCrops")
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  id             Int      @id @default(autoincrement())
+  name           String
+  city           String
+  state          String
+  totalArea      Float
+  arableArea     Float
+  vegetationArea Float
+  producerId     Int
+  producer   Producer @relation(fields: [producerId], references: [id], name: "ProducerFarms", onDelete: Cascade)
+  crops          Crop[]   // Relação direta com Crop
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
+
 
 model Crop {
-  id           Int         @id @default(autoincrement())
-  name         String      @unique
-  farmCrops    FarmCrop[]  @relation("FarmCrops")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-}
-
-model Harvest {
-  id           Int         @id @default(autoincrement())
-  name         String      @unique
-  farmCrops    FarmCrop[]  @relation("FarmCrops")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-}
-
-model FarmCrop {
-  id           Int      @id @default(autoincrement())
-  farmId       Int
-  cropId       Int
-  harvestId    Int
-
-  farm         Farm     @relation(fields: [farmId], references: [id], name: "FarmCrops")
-  crop         Crop     @relation(fields: [cropId], references: [id], name: "FarmCrops")
-  harvest      Harvest  @relation(fields: [harvestId], references: [id], name: "FarmCrops")
-
-  @@unique([farmId, cropId, harvestId])
+  id             Int      @id @default(autoincrement())
+  name           String
+  variety        String?   // variedade da cultura (ex: Milho BT, Soja RR)
+  harvestYear    Int       // ano da safra
+  plantingDate   DateTime? // data de plantio
+  harvestDate    DateTime? // data de colheita
+  area Float? // hectares plantados
+  yield          Float?    // produtividade estimada em sacas/hectare ou kg/ha
+  farmId         Int
+  farm           Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }

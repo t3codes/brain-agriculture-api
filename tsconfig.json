@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "target": "ES2023",
     "module": "commonjs",
     "lib": ["ES2023"],
@@ -13,7 +14,8 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
+      "@nestjs/*": ["node_modules/@nestjs/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

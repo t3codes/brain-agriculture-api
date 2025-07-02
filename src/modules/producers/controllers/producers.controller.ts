@@ -8,6 +8,7 @@ import {
   UseGuards,
   Req,
   Param,
+  Put,
 } from '@nestjs/common';
 import { ProducersService } from '../services/producers.service';
 import { CreateProducerDto } from '../dto/create-producer.dto';
@@ -34,7 +35,7 @@ export class ProducersController {
     return this.producersService.findOne(+id, req.user.userId);
   }
 
-  @Patch('update/:id')
+  @Put('update/:id')
   update(
     @Param('id') id: string,
     @Req() req,

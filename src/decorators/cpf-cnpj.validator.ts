@@ -1,4 +1,3 @@
-// src/common/validators/is-cpf-or-cnpj.validator.ts
 import {
     registerDecorator,
     ValidationOptions,

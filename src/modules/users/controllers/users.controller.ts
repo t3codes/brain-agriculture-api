@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Put, Delete, UseGuards, Req, Param } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthRole } from 'src/decorators/user.role.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post('create/accounts')
   create(@Body() createUserDto: CreateUserDto) {
@@ -26,8 +28,20 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete('delete/accounts')
-  remove(@Req() req) {
-    return this.usersService.remove(req.user.userId);
+  @Delete('delete/accounts/:id')
+  remove(@Param('id') id: string, @Req() req) {
+    return this.usersService.remove(+id, req.user);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id/toggle-role')
+  async toggleRole(
+    @Param('id') id: string,
+    @Body() body: { role: Role },
+    @Req() req: { user: { id: number; role: Role, superuser: boolean } } 
+  ) {
+    return this.usersService.toggleUserRole(+id, body.role, req.user);
+  }
+
+
 }
