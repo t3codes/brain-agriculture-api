@@ -1,98 +1,214 @@
+
+# 🚜 Brain Agriculture API
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <a href="https://nestjs.com/" target="blank">
+    <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="NestJS Logo" />
+  </a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  <b>A progressive <a href="https://nodejs.org">Node.js</a> framework for building efficient and scalable server-side applications.</b>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📚 Descrição
 
-## Project setup
+Este projeto é uma API construída com **[NestJS](https://nestjs.com/)**, usando **Prisma ORM** e **PostgreSQL**, para gerenciar produtores, fazendas e culturas agrícolas de forma robusta e escalável.
 
-```bash
-$ npm install
-```
+---
 
-## Compile and run the project
+## ⚡️ Tecnologias principais
 
-```bash
-# development
-$ npm run start
+- **NestJS** — Framework Node.js para aplicações escaláveis
+- **Prisma ORM** — Mapeamento objeto-relacional
+- **PostgreSQL** — Banco de dados relacional
+- **Docker** — Containerização do app e do banco de dados
 
-# watch mode
-$ npm run start:dev
+---
 
-# production mode
-$ npm run start:prod
-```
+## ✅ Pré-requisitos
 
-## Run tests
+- [Docker](https://www.docker.com/get-started) + [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js](https://nodejs.org/) + [npm](https://www.npmjs.com/) (opcional, caso queira rodar local)
 
-```bash
-# unit tests
-$ npm run test
+---
 
-# e2e tests
-$ npm run test:e2e
+## 🚀 Como usar
 
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 1️⃣ Clone o projeto
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+git clone git@github.com:t3codes/brain-agriculture-api.git
+cd brain-agriculture-api.git
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 2️⃣ Configure as variáveis de ambiente
 
-## Resources
+Crie um arquivo `.env` na raiz com este conteúdo de exemplo:
 
-Check out a few resources that may come in handy when working with NestJS:
+```env
+# --------------------
+# APP CONFIG
+# --------------------
+APP_NAME=brain-agriculture
+APP_PORT=3000
+NODE_ENV=development
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# --------------------
+# DATABASE CONFIG
+# --------------------
+DB_HOST=postgres
+DB_PORT=5432
+DB_USER=brainag_admin
+DB_PASSWORD=SENHA_FORTE_AQUI
+DB_NAME=brainag_db
 
-## Support
+# Prisma connection string
+DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# --------------------
+# JWT AUTH
+# --------------------
+JWT_SECRET=SUA_JWT_SECRET_AQUI
+JWT_REFRESH_SECRET=SUA_JWT_REFRESH_SECRET_AQUI
+JWT_EXPIRES_IN=1h
 
-## Stay in touch
+# --------------------
+# LOGGING
+# --------------------
+LOG_LEVEL=debug
+PRISMA_QUERY_ENGINE_NO_CACHE=1
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 3️⃣ Suba tudo com Docker
 
-## License
+```bash
+docker-compose up --build
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+✅ Isso cria os contêineres:
+- **postgres** (banco)
+- **brain-agriculture** (API NestJS com Prisma)
+
+A API ficará disponível em: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🔁 Regerar o Prisma Client (opcional)
+
+Sempre que modificar o `schema.prisma`:
+
+```bash
+# Gere o Client na máquina (se rodar local)
+npx prisma generate
+
+# Ou rode dentro do contêiner:
+docker-compose exec brain-agriculture npx prisma generate
+```
+
+---
+
+## 🧪 Testes
+
+### ✅ Rodar testes unitários
+
+```bash
+# Local
+npx jest
+
+# Docker
+docker-compose exec -it brain-agriculture npx jest
+```
+
+### ✅ Rodar testes e2e
+
+```bash
+# Local
+npm run test:e2e
+
+# Docker
+docker-compose exec -it brain-agriculture npm run test:e2e
+```
+
+### ✅ Ver cobertura de testes
+
+```bash
+# Local
+npm run test:cov
+
+# Docker
+docker-compose exec brain-agriculture npm run test:cov
+```
+
+---
+
+## ⚙️ Scripts úteis
+
+```bash
+# Compilar
+npm run build
+
+# Iniciar em dev com hot reload
+npm run start:dev
+
+# Iniciar em produção
+npm run start:prod
+
+# Sincronizar banco se precisar rodar migrations
+npx prisma migrate dev
+```
+
+---
+
+## 🐳 Comandos Docker principais
+
+```bash
+# Subir tudo
+docker-compose up --build
+
+# Parar tudo
+docker-compose down
+
+# Acessar o contêiner do backend
+docker-compose exec -it brain-agriculture sh
+
+# Ver logs em tempo real
+docker-compose logs -f brain-agriculture
+```
+
+---
+
+## 📌 Dicas importantes
+
+✅ **Banco acessível no contêiner:** Use `DB_HOST=postgres` no `.env`.  
+✅ **Gere o Prisma Client dentro do contêiner em dev**, usando `npx prisma generate` no script `start:dev`.  
+✅ **Volumes:** O volume `.:/usr/src/app` permite hot reload do código.
+
+---
+
+## 📚 Recursos úteis
+
+- [Documentação NestJS](https://docs.nestjs.com)
+- [Documentação Prisma](https://www.prisma.io/docs)
+- [Documentação Docker](https://docs.docker.com/)
+
+---
+
+## 📝 Licença
+
+Este projeto é licenciado sob a [MIT License](LICENSE).
+
+---
+
+## ✨ Considerações Finais
+Tentei dar o meu melhor neste projeto, aplicando boas práticas com NestJS, Prisma, Docker e organização de ambiente para desenvolvimento e testes.
+
+Sei que sempre há pontos a melhorar, mas busquei entregar um código limpo, estruturado e fácil de manter.
+
+Espero que este trabalho esteja à altura da vaga e demonstre meu comprometimento, dedicação e vontade de crescer junto com o time.
+
+Fico à disposição para ajustes, melhorias ou para discutir qualquer detalhe técnico!
+
+Obrigado pela oportunidade! 🚀
